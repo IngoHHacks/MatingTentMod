@@ -1,0 +1,11 @@
+{
+  "namespace": "IngoH",
+  "name": "MatingTentMod",
+  "description": "Adds mating tents to Cult of the Lamb",
+  "version_number": "0.1.3",
+  "dependencies": [
+    "BepInEx-BepInExPack_CultOfTheLamb-5.4.21",
+    "xhayper-COTL_API-0.1.3"
+  ],
+  "website_url": "https://github.com/IngoHHacks/MatingTentMod"
+}
