@@ -80,12 +80,6 @@ public class MateFollow : CustomTask
         structureByID.ReservedForTask = true;
     }
 
-    public override void ReleaseReservations()
-    {
-        StructureBrain structureByID = GetStructure().Brain;
-        structureByID.ReservedForTask = false;
-    }
-
     public override Vector3 UpdateDestination(Follower follower)
     {
         StructureBrain structureByID = GetStructure().Brain;

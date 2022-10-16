@@ -5,6 +5,9 @@ using Lamb.UI;
 using Lamb.UI.FollowerSelect;
 using MatingTentMod.Structures;
 using MatingTentMod.Tasks;
+using MatingTentMod.Utils;
+using src.Extensions;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
@@ -54,16 +57,24 @@ public class MateCommand : CustomFollowerCommand
             interaction.CloseAndSpeak("NoFollowers");
             return;
         }
-        
-        UIFollowerSelectMenuController mateFollowerSelect =  Object.Instantiate(MonoSingleton<UIManager>.Instance.FollowerSelectMenuTemplate);
-        mateFollowerSelect.Show(FollowerBrain.AllAvailableFollowerBrains().Where(x => x != interaction.follower.Brain && !FollowerManager.FollowerLocked(x.Info.ID, true)).ToList(), null, instant: false, UpgradeSystem.Type.Count, hideOnSelection: true, cancellable: false);
+
+        UIFollowerSelectMenuController mateFollowerSelect = MonoSingleton<UIManager>.Instance.FollowerSelectMenuTemplate.Instantiate();
+        List<FollowerBrain> validBrains = FollowerBrain.AllAvailableFollowerBrains().Where(x =>
+            x != interaction.follower.Brain && !FollowerManager.FollowerLocked(x.Info.ID, true) &&
+            x.Info.CursedState != CustomCursedStates.CHILD && x.Info.CursedState != Thought.OldAge).ToList();
+        mateFollowerSelect.Show(validBrains, null, instant: false, UpgradeSystem.Type.Count, hideOnSelection: true, cancellable: false);
         mateFollowerSelect.OnFollowerSelected = (selectedFollower) =>
         {
-            if (selectedFollower == null || selectedFollower.ID == interaction.follower.Brain.Info.ID) interaction.Close();
+            if (selectedFollower == null || selectedFollower.ID == interaction.follower.Brain.Info.ID)
+            {
+                interaction.Close();
+                return;
+            }
             interaction.StartCoroutine(interaction.FrameDelayCallback(delegate
             {
                 interaction.eventListener.PlayFollowerVO(interaction.generalAcknowledgeVO);
                 FollowerBrain selectedFollowerBrain = FollowerBrain.FindBrainByID(selectedFollower.ID);
+                Follower selectedFollowerFollower = FollowerManager.FindFollowerByID(selectedFollower.ID);
                 MateLead lead = new(selectedFollowerBrain);
                 interaction.follower.Brain.HardSwapToTask(lead);
                 interaction.follower.Brain.CurrentOverrideTaskType = lead.Type;

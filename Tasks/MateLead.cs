@@ -2,6 +2,7 @@
 using COTL_API.Helpers;
 using DG.Tweening;
 using MatingTentMod.Structures;
+using MatingTentMod.Utils;
 using Spine;
 using System;
 using System.Collections;
@@ -101,6 +102,7 @@ public class MateLead : CustomTask
             f.SetOutfit(FollowerOutfitType.Follower, hooded: false);
             LerpFollower(f.gameObject);
             f.Brain.HardSwapToTask(new FollowerTask_ManualControl());
+            f.Brain.ApplyCurseState(CustomCursedStates.CHILD);
             f.TimedAnimation("idle", 60f, base.End, Loop: true);
             f.StartCoroutine(FollowerGrow(f));
 
@@ -119,6 +121,7 @@ public class MateLead : CustomTask
                 FollowerManager.RemoveFollower(follower.Brain.Info.ID);
                 follower.Brain.Cleanup();
                 follower.Brain.ClearDwelling();
+                follower.Brain.ApplyCurseState(Thought.None);
                 if ((bool)follower.gameObject)
                 {
                     Object.Destroy(follower.gameObject);

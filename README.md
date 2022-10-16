@@ -4,6 +4,7 @@ This is a beta version. If you find any bugs or other issues, please report them
 (SFW version)  
 (There is no NSFW version, sorry)  
 ([Donate](https://ko-fi.com/IngoH) or send me the needed art assets if you want to see a NSFW version)
+(Join the Discord below and ask me for access to the NSFW channels for updates on the NSFW version)
 
 Contact:  
 [Discord Server](https://discord.gg/9Xqvb8Cszg) | `IngoH#3923`
@@ -15,6 +16,12 @@ Contact:
 - Leaving the cult while a follower is growing up will cause the follower to be permanently frozen.
 
 ## Changelog
+
+### 0.1.4
+- It is no longer possible to mate with children.
+- It is no longer possible to mate with old followers.
+- Fixed mating the "non-pregnant" follower freeing the mating tent's reservation after completing the mating.
+- 
 ### 0.1.3
 - Fixed mating tent being immovable and indestructible.
 - Fixed followers' brains being destroyed when they are respawned for recruiting.
