@@ -16,7 +16,7 @@ namespace MatingTentMod
     {
         public const string PluginGuid = "IngoH.cotl.MatingTentMod";
         public const string PluginName = "MatingTentMod";
-        public const string PluginVer = "0.1.3";
+        public const string PluginVer = "0.1.4";
 
         internal static ManualLogSource Log;
         internal readonly static Harmony Harmony = new(PluginGuid);
