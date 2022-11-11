@@ -27,7 +27,7 @@ Contact:
 - It is no longer possible to mate with children.
 - It is no longer possible to mate with old followers.
 - Fixed mating the "non-pregnant" follower freeing the mating tent's reservation after completing the mating.
-- 
+
 ### 0.1.3
 - Fixed mating tent being immovable and indestructible.
 - Fixed followers' brains being destroyed when they are respawned for recruiting.
