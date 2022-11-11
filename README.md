@@ -12,10 +12,16 @@ Contact:
 :3
 
 ## Known Issues
-- The mating command sometimes fails. I don't know why, but just try again.
+- The mating command sometimes fails. If it does, try again.
+- Keyboard controls don't work when selecting a follower to mate with.
 - Leaving the cult while a follower is growing up will cause the follower to be permanently frozen.
 
 ## Changelog
+
+### 0.2.0
+- Children now inherit traits (a number between both parents' trait count, randomly selected), levels (50% of the average), and skins (45% to choose either parent's skin, 10% to choose a random skin) from their parents.
+- The mating command will no longer appear for children and old followers.
+- Children now start with age 0, increasing by 1 every 3 seconds until they reach age 18.
 
 ### 0.1.4
 - It is no longer possible to mate with children.

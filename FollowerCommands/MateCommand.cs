@@ -31,6 +31,7 @@ public class MateCommand : CustomFollowerCommand
 
     public override bool ShouldAppearFor(Follower follower)
     {
+        if (follower.Brain.Info.OldAge || follower.Brain.Info.Age < 18) return false;
         return Structure.Structures.FirstOrDefault<Structure>(str => str.Structure_Info != null && str.Structure_Info.Type == CustomStructureManager.GetStructureByType<MatingTent>()) != null;
     }
 

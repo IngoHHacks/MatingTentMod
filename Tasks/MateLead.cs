@@ -4,6 +4,7 @@ using DG.Tweening;
 using MatingTentMod.Structures;
 using MatingTentMod.Utils;
 using Spine;
+using Spine.Unity;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -97,6 +98,37 @@ public class MateLead : CustomTask
         if (name == "Poop")
         {
             this._hasMated = true;
+            
+            
+            FollowerBrain parent1 = this._follower.Brain;
+            FollowerBrain parent2 = this._linkedBrain;
+            
+            List<FollowerTrait.TraitType> traits = new();
+            traits.AddRange(parent1.Info.Traits);
+            int numTraits1 = traits.Count;
+            traits.AddRange(parent2.Info.Traits);
+            int numTraits2 = traits.Count - numTraits1;
+            
+            int numTraits = Random.Range(numTraits1, numTraits2 + 1);
+            
+            traits = traits.OrderBy(x => Random.value).ToList();
+
+            List<FollowerTrait.TraitType> selectedTraits = new();
+            foreach (FollowerTrait.TraitType trait in traits)
+            {
+                if (selectedTraits.Count >= numTraits) break;
+                if (selectedTraits.Contains(trait)) continue;
+                if (selectedTraits.Any(x => FollowerTrait.ExclusiveTraits.ContainsKey(x) && FollowerTrait.ExclusiveTraits[x] == trait)) continue;
+                selectedTraits.Add(trait);
+            }
+            
+            float fLevel = (100 * parent1.Info.XPLevel - 1) +  parent1.Stats.Adoration + (100 * parent2.Info.XPLevel - 1) + parent2.Stats.Adoration;
+            fLevel /= 4;
+            float adoration = fLevel % 100;
+            int level = ((int) fLevel / 100) + 1;
+
+            string skin = Random.Range(0, 2) == 0 ? parent1.Info.SkinName : parent2.Info.SkinName;
+            
             Follower f = FollowerManager.CreateNewFollower(PlayerFarming.Location, _follower.transform.position);
             f.Brain.Info.Outfit = FollowerOutfitType.Follower;
             f.SetOutfit(FollowerOutfitType.Follower, hooded: false);
@@ -105,13 +137,36 @@ public class MateLead : CustomTask
             f.Brain.ApplyCurseState(CustomCursedStates.CHILD);
             f.TimedAnimation("idle", 60f, base.End, Loop: true);
             f.StartCoroutine(FollowerGrow(f));
-
+            f.Brain.Info.Traits.Clear();
+            selectedTraits.ForEach(trait => f.AddTrait(trait));
+            if (Random.Range(0, 10) != 0)
+            {
+                f.Brain.Info.SkinName = skin;
+                f.Brain.Info.SkinCharacter = WorshipperData.Instance.GetSkinIndexFromName(skin);
+                f.Brain.Info.SkinColour = Random.Range(0, WorshipperData.Instance.GetColourData(f.Brain.Info.SkinName).StartingSlotAndColours.Count);
+                f.Brain.Info.SkinVariation = Random.Range(0, WorshipperData.Instance.Characters[f.Brain.Info.SkinCharacter].Skin.Count);
+                Skin spineSkin = f.Spine.Skeleton.Data.FindSkin(f.Brain.Info.SkinName);
+                string outfitSkinName = f.Outfit.GetOutfitSkinName(f.Brain.Info.Outfit);
+                spineSkin.AddSkin(f.Spine.Skeleton.Data.FindSkin(outfitSkinName));
+                f.Spine.Skeleton.SetSkin(skin);
+                foreach (WorshipperData.SlotAndColor slotAndColour in WorshipperData.Instance.GetColourData(f.Brain.Info.SkinName).SlotAndColours[f.Brain.Info.SkinColour].SlotAndColours)
+                {
+                    f.Spine.skeleton.FindSlot(slotAndColour.Slot)?.SetColor(slotAndColour.color);
+                }
+            }
+            f.Brain.Info.Age = 0;
+            f.Brain.Stats.Adoration = adoration;
+            f.Brain.Info.XPLevel = level;
         }
     }
 
     private IEnumerator FollowerGrow(Follower follower)
     {
-        yield return new WaitForSeconds(60f);
+        for (int i = 0; i < 18; i++)
+        {
+            yield return new WaitForSeconds(3f);
+            follower.Brain.Info.Age += 1;
+        }
         try
         {
             follower.TimedAnimation("Reactions/react-happy1", 3f, Loop: false, onComplete: delegate

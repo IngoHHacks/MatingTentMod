@@ -7,7 +7,7 @@
         <TargetFramework>netstandard2.0</TargetFramework>
         <LangVersion>latest</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <DebugType>full</DebugType>
+        <DebugType>portable</DebugType>
 
         <OutputPath Condition=" '$(SolutionDir)' != '' ">$(SolutionDir)bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
         <OutputPath Condition=" '$(SolutionDir)' == '' ">$(ProjectDir)bin\$(Configuration)\$(MSBuildProjectName)\</OutputPath>
