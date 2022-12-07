@@ -9,6 +9,9 @@ This is a beta version. If you find any bugs or other issues, please report them
 Contact:  
 [Discord Server](https://discord.gg/9Xqvb8Cszg) | `IngoH#3923`
 
+## Credits
+Icon by Kelly Betty
+
 :3
 
 ## Known Issues
@@ -18,14 +21,17 @@ Contact:
 
 ## Changelog
 
+### 0.2.1
+- Updated icon.
+
 ### 0.2.0
 - Children now inherit traits (a number between both parents' trait count, randomly selected), levels (50% of the average), and skins (45% to choose either parent's skin, 10% to choose a random skin) from their parents.
 - The mating command will no longer appear for children and old followers.
 - Children now start with age 0, increasing by 1 every 3 seconds until they reach age 18.
 
 ### 0.1.4
-- It is no longer possible to mate with children.
-- It is no longer possible to mate with old followers.
+- Children can no longer mate (until grown up).
+- Old followers can no longer mate.
 - Fixed mating the "non-pregnant" follower freeing the mating tent's reservation after completing the mating.
 
 ### 0.1.3
