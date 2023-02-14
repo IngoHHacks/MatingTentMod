@@ -5,7 +5,7 @@
   "version_number": "0.4.0",
   "dependencies": [
     "BepInEx-BepInExPack_CultOfTheLamb-5.4.21",
-    "xhayper-COTL_API-0.1.14"
+    "xhayper-COTL_API-0.1.16"
   ],
   "website_url": "https://github.com/IngoHHacks/MatingTentMod"
 }
