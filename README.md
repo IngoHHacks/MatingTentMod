@@ -29,7 +29,7 @@ Icon by Kelly Betty
 - Fixed various issues with children.
 
 
-### 0.3.0
+### 0.3.0 (TS: 0.2.2)
 - Update to work with API 0.1.14.
 
 ### 0.2.1
