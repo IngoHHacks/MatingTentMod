@@ -136,7 +136,8 @@ public class MateLead : CustomTask
             f.Brain.HardSwapToTask(new FollowerTask_ManualControl());
             f.Brain.ApplyCurseState(CustomCursedStates.CHILD);
             f.TimedAnimation("idle", 60f, base.End, Loop: true);
-            f.StartCoroutine(FollowerGrow(f));
+            StructureBrain structureByID = GetStructure().Brain;
+            structureByID.ReservedForTask = false;
             f.Brain.Info.Traits.Clear();
             selectedTraits.ForEach(trait => f.AddTrait(trait));
             if (Random.Range(0, 10) != 0)
@@ -159,38 +160,6 @@ public class MateLead : CustomTask
             f.Brain.Info.XPLevel = level;
         }
     }
-
-    private IEnumerator FollowerGrow(Follower follower)
-    {
-        for (int i = 0; i < 18; i++)
-        {
-            yield return new WaitForSeconds(3f);
-            follower.Brain.Info.Age += 1;
-        }
-        try
-        {
-            follower.TimedAnimation("Reactions/react-happy1", 3f, Loop: false, onComplete: delegate
-            {
-                FollowerManager.CreateNewRecruit(follower.Brain.Info._info, follower.transform.position);
-                NotificationCentre.Instance.PlayFollowerNotification(NotificationCentre.NotificationType.NewRecruit, follower.Brain.Info, NotificationFollower.Animation.Normal);
-                FollowerManager.RemoveFollower(follower.Brain.Info.ID);
-                follower.Brain.Cleanup();
-                follower.Brain.ClearDwelling();
-                follower.Brain.ApplyCurseState(Thought.None);
-                if ((bool)follower.gameObject)
-                {
-                    Object.Destroy(follower.gameObject);
-                }
-            });
-        }
-        catch (Exception e)
-        {
-            // ignored
-        }
-        StructureBrain structureByID = GetStructure().Brain;
-        structureByID.ReservedForTask = false;
-    }
-
     
     private void LerpFollower(GameObject follower)
     {
@@ -198,7 +167,6 @@ public class MateLead : CustomTask
         position = new Vector3(position.x + 1f - (Random.value * 2f), position.y, position.z + 1f - (Random.value * 2f));
         follower.transform.localScale = Vector3.one * 0.5f;
         follower.transform.DOMove(position, 0.25f).SetEase(Ease.OutSine);
-        follower.transform.DOScale(1f, 60f).SetEase(Ease.OutSine);
     }
 
 

@@ -46,24 +46,31 @@ public class MateCommand : CustomFollowerCommand
         return "Unable to mate.";
     }
 
-    public override void Execute(interaction_FollowerInteraction interaction, global::FollowerCommands finalCommand = global::FollowerCommands.None)
+    public override void Execute(interaction_FollowerInteraction interaction,
+        global::FollowerCommands finalCommand = global::FollowerCommands.None)
     {
         if (TaskUtils.GetAvailableStructureOfType<MatingTent>() == null)
         {
+            interaction.eventListener.PlayFollowerVO(interaction.negativeAcknowledgeVO);
             interaction.CloseAndSpeak("NoTents");
             return;
         }
-        if (!FollowerBrain.AllAvailableFollowerBrains().Any(x => x != interaction.follower.Brain && !FollowerManager.FollowerLocked(x.Info.ID, true) && x.CurrentTask is not MateLead && x.CurrentTask is not MateFollow))
+
+        if (!FollowerBrain.AllAvailableFollowerBrains().Any(x =>
+                x != interaction.follower.Brain && !FollowerManager.FollowerLocked(x.Info.ID, true) &&
+                x.CurrentTask is not MateLead && x.CurrentTask is not MateFollow))
         {
+            interaction.eventListener.PlayFollowerVO(interaction.negativeAcknowledgeVO);
             interaction.CloseAndSpeak("NoFollowers");
             return;
         }
 
-        UIFollowerSelectMenuController mateFollowerSelect = MonoSingleton<UIManager>.Instance.FollowerSelectMenuTemplate.Instantiate();
+        UIFollowerSelectMenuController mateFollowerSelect =
+            MonoSingleton<UIManager>.Instance.FollowerSelectMenuTemplate.Instantiate();
         List<FollowerBrain> validBrains = FollowerBrain.AllAvailableFollowerBrains().Where(x =>
             x != interaction.follower.Brain && !FollowerManager.FollowerLocked(x.Info.ID, true) &&
             x.Info.CursedState != CustomCursedStates.CHILD && x.Info.CursedState != Thought.OldAge).ToList();
-        mateFollowerSelect.Show(validBrains, null, instant: false, UpgradeSystem.Type.Count, hideOnSelection: true, cancellable: false);
+        mateFollowerSelect.Show(validBrains);
         mateFollowerSelect.OnFollowerSelected = (selectedFollower) =>
         {
             if (selectedFollower == null || selectedFollower.ID == interaction.follower.Brain.Info.ID)
@@ -71,20 +78,16 @@ public class MateCommand : CustomFollowerCommand
                 interaction.Close();
                 return;
             }
+
             interaction.StartCoroutine(interaction.FrameDelayCallback(delegate
             {
                 interaction.eventListener.PlayFollowerVO(interaction.generalAcknowledgeVO);
                 FollowerBrain selectedFollowerBrain = FollowerBrain.FindBrainByID(selectedFollower.ID);
-                Follower selectedFollowerFollower = FollowerManager.FindFollowerByID(selectedFollower.ID);
-                MateLead lead = new(selectedFollowerBrain);
-                interaction.follower.Brain.HardSwapToTask(lead);
-                interaction.follower.Brain.CurrentOverrideTaskType = lead.Type;
-                MateFollow follow = new(interaction.follower.Brain);
-                selectedFollowerBrain.HardSwapToTask(follow);
-                selectedFollowerBrain.CurrentOverrideTaskType = follow.Type;
+                MateActions.BeginMate(interaction.follower.Brain, selectedFollowerBrain);
+                interaction.Close();
             }));
-            interaction.Close();
         };
+        mateFollowerSelect.OnCancel = delegate { interaction.Close(); };
     }
 
 }

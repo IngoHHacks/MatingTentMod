@@ -16,7 +16,7 @@ public class MatingTent : CustomStructure
 
     public override Vector2Int Bounds => new(2, 2);
 
-    public override int BuildDurationMinutes => 30;
+    public override int BuildDurationMinutes => 300;
 
     public override string GetLocalizedName() => "Mating Tent";
     public override string GetLocalizedDescription() => "A tent for mating.";
@@ -29,5 +29,5 @@ public class MatingTent : CustomStructure
     };
 
     public override FollowerCategory.Category Category => FollowerCategory.Category.Misc;
-    public override Categories Categories => Categories.FOLLOWERS;
+    public override Categories StructureCategories => Categories.FOLLOWERS;
 }

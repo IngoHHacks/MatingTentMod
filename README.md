@@ -15,11 +15,22 @@ Icon by Kelly Betty
 :3
 
 ## Known Issues
-- The mating command sometimes fails. If it does, try again.
-- Keyboard controls don't work when selecting a follower to mate with.
-- Leaving the cult while a follower is growing up will cause the follower to be permanently frozen.
+- None
 
 ## Changelog
+
+### 0.4.0
+- Added proper dialog for failed mating actions.
+- Added sounds for failed mating actions.
+- Children no longer need to be indoctrinated.
+- Follower selection for mating can now be canceled.
+- Fixed the command sometimes failing unexpectedly (hopefully).
+- Fixed keyboard controls
+- Fixed various issues with children.
+
+
+### 0.3.0
+- Update to work with API 0.1.14.
 
 ### 0.2.1
 - Updated icon.

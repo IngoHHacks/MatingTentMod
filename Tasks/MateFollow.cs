@@ -32,7 +32,7 @@ public class MateFollow : CustomTask
     private Structure GetStructure()
     {
         if (_structure != null) return _structure;
-        else return _structure = ((MateLead) this._linkedBrain.CurrentTask).LinkedStructure;
+        return _structure = ((MateLead) this._linkedBrain.CurrentTask).LinkedStructure;
     }
 
     public override void TaskTick(float deltaGameTime)
