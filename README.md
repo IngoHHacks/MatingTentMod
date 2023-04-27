@@ -19,6 +19,9 @@ Icon by Kelly Betty
 
 ## Changelog
 
+### 0.5.0
+- Update for the Relics of the Old Faith update.
+
 ### 0.4.0
 - Added proper dialog for failed mating actions.
 - Added sounds for failed mating actions.

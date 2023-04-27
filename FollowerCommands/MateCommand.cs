@@ -75,7 +75,7 @@ public class MateCommand : CustomFollowerCommand
         {
             if (selectedFollower == null || selectedFollower.ID == interaction.follower.Brain.Info.ID)
             {
-                interaction.Close();
+                interaction.Close(true, reshowMenu: false);
                 return;
             }
 
@@ -84,10 +84,11 @@ public class MateCommand : CustomFollowerCommand
                 interaction.eventListener.PlayFollowerVO(interaction.generalAcknowledgeVO);
                 FollowerBrain selectedFollowerBrain = FollowerBrain.FindBrainByID(selectedFollower.ID);
                 MateActions.BeginMate(interaction.follower.Brain, selectedFollowerBrain);
-                interaction.Close();
+                interaction.Close(true, reshowMenu: false);
+                interaction.Close(true, reshowMenu: false);
             }));
         };
-        mateFollowerSelect.OnCancel = delegate { interaction.Close(); };
+        mateFollowerSelect.OnCancel = delegate { interaction.Close(true, reshowMenu: false); };
     }
 
 }
