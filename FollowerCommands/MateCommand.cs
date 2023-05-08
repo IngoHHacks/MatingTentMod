@@ -22,7 +22,7 @@ public class MateCommand : CustomFollowerCommand
 
     public override string GetTitle(Follower follower)
     {
-        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+        if (LocalizationManager.CurrentLanguageCode == "zh-CN")
             return "交配";
         else
             return "Mate";
@@ -30,7 +30,7 @@ public class MateCommand : CustomFollowerCommand
 
     public override string GetDescription(Follower follower)
     {
-        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+        if (LocalizationManager.CurrentLanguageCode == "zh-CN")
             return "与另一位教徒交配。";
         else
             return "Mate with another follower.";

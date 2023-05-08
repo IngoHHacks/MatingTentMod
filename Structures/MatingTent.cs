@@ -21,14 +21,14 @@ public class MatingTent : CustomStructure
 
     public override string GetLocalizedName()
     {
-        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+        if (LocalizationManager.CurrentLanguageCode == "zh-CN")
             return "交配用帐篷";
         else
             return "Mating Tent";
     }
     public override string GetLocalizedDescription()
     {
-        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+        if (LocalizationManager.CurrentLanguageCode == "zh-CN")
             return "用于交配的帐篷。";
         else
             return"A tent for mating.";
