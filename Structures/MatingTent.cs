@@ -1,5 +1,6 @@
 ﻿using COTL_API.CustomStructures;
 using COTL_API.Helpers;
+using I2.Loc;
 using Lamb.UI.BuildMenu;
 using System.Collections.Generic;
 using System.IO;
@@ -18,8 +19,20 @@ public class MatingTent : CustomStructure
 
     public override int BuildDurationMinutes => 300;
 
-    public override string GetLocalizedName() => "Mating Tent";
-    public override string GetLocalizedDescription() => "A tent for mating.";
+    public override string GetLocalizedName()
+    {
+        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+            return "交配用帐篷";
+        else
+            return "Mating Tent";
+    }
+    public override string GetLocalizedDescription()
+    {
+        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+            return "用于交配的帐篷。";
+        else
+            return"A tent for mating.";
+    }
 
     public override List<StructuresData.ItemCost> Cost => new()
     {

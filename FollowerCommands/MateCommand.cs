@@ -1,6 +1,7 @@
 ﻿using COTL_API.CustomFollowerCommand;
 using COTL_API.CustomStructures;
 using COTL_API.Helpers;
+using I2.Loc;
 using Lamb.UI;
 using Lamb.UI.FollowerSelect;
 using MatingTentMod.Structures;
@@ -21,12 +22,18 @@ public class MateCommand : CustomFollowerCommand
 
     public override string GetTitle(Follower follower)
     {
-        return "Mate";
+        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+            return "交配";
+        else
+            return "Mate";
     }
 
     public override string GetDescription(Follower follower)
     {
-        return "Mate with another follower.";
+        if (LocalizationManager.CurrentLanguage == "Simplified Chinese")
+            return "与另一位教徒交配。";
+        else
+            return "Mate with another follower.";
     }
 
     public override bool ShouldAppearFor(Follower follower)
