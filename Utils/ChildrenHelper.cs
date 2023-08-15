@@ -36,13 +36,14 @@ public class ChildrenHelper
             {
                 if (follower.Brain.Info.Age < 18)
                 {
-                    follower.transform.localScale = Vector3.one * (0.5f + follower.Brain.Info.Age * 0.0277778f);
+                    follower.transform.localScale = Vector3.one * (0.5f + (follower.Brain.Info.Age * 0.0277778f));
                     follower.Brain.Info.Age += 1;
-                    follower.transform.DOScale(Vector3.one * (0.5f + follower.Brain.Info.Age * 0.0277778f), AG_TIME)
+                    follower.transform.DOScale(Vector3.one * (0.5f + (follower.Brain.Info.Age * 0.0277778f)), AG_TIME)
                         .SetEase(Ease.OutSine);
                 }
                 else
                 {
+                    follower.transform.localScale = Vector3.one;
                     follower.TimedAnimation("Reactions/react-happy1", 2.9f, Loop: false, onComplete: delegate
                     {
                         follower.Brain.RemoveCurseState(CustomCursedStates.CHILD);

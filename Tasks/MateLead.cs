@@ -158,6 +158,7 @@ public class MateLead : CustomTask
             f.Brain.Info.Age = 0;
             f.Brain.Stats.Adoration = adoration;
             f.Brain.Info.XPLevel = level;
+            f.Brain.HardSwapToTask(new FollowerTask_FakeLeisure());
         }
     }
     
