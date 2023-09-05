@@ -1,7 +1,5 @@
-﻿using COTL_API.CustomStructures;
-using HarmonyLib;
+﻿using HarmonyLib;
 using I2.Loc;
-using MatingTentMod.Structures;
 
 namespace MatingTentMod.Patches;
 
@@ -17,7 +15,8 @@ internal class TranslationsPatch
             __result = "Great Leader, there are no tents available for me to mate in!";
             return false;
         }
-        else if (Term == "FollowerInteractions/NoFollowers")
+
+        if (Term == "FollowerInteractions/NoFollowers")
         {
             __result = "Great Leader, there are no followers available for me to mate with!";
         }

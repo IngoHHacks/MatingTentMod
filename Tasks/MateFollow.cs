@@ -6,59 +6,68 @@ namespace MatingTentMod.Tasks;
 
 public class MateFollow : CustomTask
 {
-    public override string InternalName => "MATE_FOLLOW";
-    
-    private Structure _structure;
-
     private Follower _follower;
-    private FollowerBrain _linkedBrain;
+    private readonly FollowerBrain _linkedBrain;
+
+    private Structure _structure;
+    private int _timeNotMating;
     private float delay;
 
-    private bool mating = false;
-    private int _timeNotMating = 0;
-
-    public override FollowerLocation Location => GetStructure().Brain.Data.Location;
-
-    public override bool BlockReactTasks => true;
-    public override bool BlockTaskChanges => true;
-    public override bool BlockSocial => true;
+    private bool mating;
 
     public MateFollow(FollowerBrain linkedBrain)
     {
         this._linkedBrain = linkedBrain;
     }
 
+    public override string InternalName => "MATE_FOLLOW";
+
+    public override FollowerLocation Location => GetStructure().Brain.Data.Location;
+
+    public override bool BlockReactTasks => true;
+    public override bool BlockTaskChanges => true;
+    public override bool BlockSocial => true;
+    public override bool DisablePickUpInteraction => true;
+
 
     private Structure GetStructure()
     {
-        if (_structure != null) return _structure;
-        return _structure = ((MateLead) this._linkedBrain.CurrentTask).LinkedStructure;
+        if (this._structure != null)
+        {
+            return this._structure;
+        }
+
+        return this._structure = ((MateLead)this._linkedBrain.CurrentTask).LinkedStructure;
     }
 
     public override void TaskTick(float deltaGameTime)
     {
         try
         {
-            if (!mating && (delay > 0 || (State == FollowerTaskState.Doing && _linkedBrain?.CurrentTask is MateLead &&
-                                          _linkedBrain.CurrentTask.State == FollowerTaskState.Doing)))
+            if (!this.mating && (this.delay > 0 || (this.State == FollowerTaskState.Doing &&
+                                                    this._linkedBrain?.CurrentTask is MateLead &&
+                                                    this._linkedBrain.CurrentTask.State == FollowerTaskState.Doing)))
             {
-                if (delay < 1)
+                if (this.delay < 1)
                 {
-                    delay += deltaGameTime;
+                    this.delay += deltaGameTime;
                 }
                 else
                 {
-                    mating = true;
-                    _follower.FacePosition(_linkedBrain.LastPosition);
-                    _follower.TimedAnimation("dance", 5f, Complete);
+                    this.mating = true;
+                    this._follower.FacePosition(this._linkedBrain.LastPosition);
+                    this._follower.TimedAnimation("dance", 5f, Complete);
                 }
             }
             else if (!this.mating)
             {
                 if (this._linkedBrain.CurrentTask is not MateLead)
                 {
-                    _timeNotMating += 1;
-                    if (_timeNotMating >= 3) this.End();
+                    this._timeNotMating += 1;
+                    if (this._timeNotMating >= 3)
+                    {
+                        End();
+                    }
                 }
             }
         }
@@ -91,6 +100,6 @@ public class MateFollow : CustomTask
     public override void OnStart()
     {
         SetState(FollowerTaskState.GoingTo);
-        delay = 0;
+        this.delay = 0;
     }
 }

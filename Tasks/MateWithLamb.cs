@@ -14,26 +14,18 @@ using Random = UnityEngine.Random;
 
 namespace MatingTentMod.Tasks;
 
-public class MateLead : CustomTask
+public class MateWithLamb : CustomTask
 {
     private Follower _follower;
 
     private bool _hasMated;
-    private readonly FollowerBrain _linkedBrain;
 
     private Structure _structure;
-    private int _timeNotMating;
     private float delay;
 
     private bool mating;
     private float progress;
-
-    public MateLead(FollowerBrain linkedBrain)
-    {
-        this._linkedBrain = linkedBrain;
-    }
-
-    public override string InternalName => "MATE_LEAD";
+    public override string InternalName => "MATE_LAMB";
 
     public override FollowerLocation Location => GetStructure().Brain.Data.Location;
 
@@ -41,8 +33,6 @@ public class MateLead : CustomTask
     public override bool BlockTaskChanges => true;
     public override bool BlockSocial => true;
     public override bool DisablePickUpInteraction => true;
-
-    public Structure LinkedStructure => GetStructure();
 
     private Structure GetStructure()
     {
@@ -58,9 +48,8 @@ public class MateLead : CustomTask
     {
         try
         {
-            if (!this.mating && (this.delay > 0 || (this.State == FollowerTaskState.Doing &&
-                                                    this._linkedBrain?.CurrentTask is MateFollow &&
-                                                    this._linkedBrain.CurrentTask.State == FollowerTaskState.Doing)))
+            if (!this.mating && (this.delay > 0 || this.State == FollowerTaskState.Doing) &&
+                !PlayerFarming.Instance.GoToAndStopping)
             {
                 if (this.delay < 1)
                 {
@@ -69,27 +58,13 @@ public class MateLead : CustomTask
                 else
                 {
                     this.mating = true;
-                    this._follower.FacePosition(this._linkedBrain.LastPosition);
-                    this._follower.TimedAnimation("dance", 5f, delegate
+                    this._follower.FacePosition(PlayerFarming.Instance.playerController.transform.position);
+                    this._follower.Spine.AnimationState.Event += CreateFollower;
+                    this._follower.TimedAnimation("poop", 1.5333333f, delegate
                     {
-                        this._follower.Spine.AnimationState.Event += CreateFollower;
-                        this._follower.TimedAnimation("poop", 1.5333333f, delegate
-                        {
-                            this._follower.Spine.AnimationState.Event -= CreateFollower;
-                            this._follower.TimedAnimation("Reactions/react-embarrassed", 3f, End, false);
-                        });
+                        this._follower.Spine.AnimationState.Event -= CreateFollower;
+                        this._follower.TimedAnimation("Reactions/react-embarrassed", 3f, End, false);
                     });
-                }
-            }
-            else if (!this.mating)
-            {
-                if (this._linkedBrain.CurrentTask is not MateFollow)
-                {
-                    this._timeNotMating += 1;
-                    if (this._timeNotMating >= 3)
-                    {
-                        End();
-                    }
                 }
             }
         }
@@ -108,15 +83,10 @@ public class MateLead : CustomTask
 
 
             FollowerBrain parent1 = this._follower.Brain;
-            FollowerBrain parent2 = this._linkedBrain;
 
             List<FollowerTrait.TraitType> traits = new();
             traits.AddRange(parent1.Info.Traits);
-            int numTraits1 = traits.Count;
-            traits.AddRange(parent2.Info.Traits);
-            int numTraits2 = traits.Count - numTraits1;
-
-            int numTraits = Random.Range(numTraits1, numTraits2 + 1);
+            int numTraits = traits.Count;
 
             traits = traits.OrderBy(x => Random.value).ToList();
 
@@ -142,13 +112,12 @@ public class MateLead : CustomTask
                 selectedTraits.Add(trait);
             }
 
-            float fLevel = (100 * parent1.Info.XPLevel) - 1 + parent1.Stats.Adoration +
-                           ((100 * parent2.Info.XPLevel) - 1) + parent2.Stats.Adoration;
-            fLevel /= 4;
+            float fLevel = (100 * parent1.Info.XPLevel) - 1 + parent1.Stats.Adoration;
+            fLevel /= 2;
             float adoration = fLevel % 100;
             int level = ((int)fLevel / 100) + 1;
 
-            string skin = Random.Range(0, 2) == 0 ? parent1.Info.SkinName : parent2.Info.SkinName;
+            string skin = parent1.Info.SkinName;
 
             Follower f = FollowerManager.CreateNewFollower(PlayerFarming.Location, this._follower.transform.position);
             f.Brain.Info.Outfit = FollowerOutfitType.Follower;

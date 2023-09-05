@@ -1,21 +1,19 @@
 ﻿using DG.Tweening;
 using HarmonyLib;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace MatingTentMod.Utils;
 
 [HarmonyPatch]
 public class ChildrenHelper
 {
-    private static float AGING = 7.5f;
-    private static float AG_TIME = AGING / 2.5f;
-    
-    private static float _time = 0;
-    
+    private static readonly float AGING = 7.5f;
+    private static readonly float AG_TIME = AGING / 2.5f;
+
+    private static float _time;
+
     [HarmonyPatch(typeof(TimeManager), "Simulate", typeof(float))]
     [HarmonyPostfix]
     private static void PlacementRegion_GetHoveredStructure(float deltaGameTime)
@@ -30,7 +28,8 @@ public class ChildrenHelper
 
     public static void UpdateAllChildren()
     {
-        foreach (Follower follower in FollowerManager.FollowersAtLocation(FollowerLocation.Base).Where(f => f.Brain.Info.CursedState == CustomCursedStates.CHILD))
+        foreach (Follower follower in FollowerManager.FollowersAtLocation(FollowerLocation.Base)
+                     .Where(f => f.Brain.Info.CursedState == CustomCursedStates.CHILD))
         {
             try
             {
@@ -50,7 +49,11 @@ public class ChildrenHelper
                         follower.Brain.HardSwapToTask(new FollowerTask_Idle());
                     });
                 }
-            } catch (Exception all) { /* ignore */ }
+            }
+            catch (Exception all)
+            {
+                /* ignore */
+            }
         }
     }
 }

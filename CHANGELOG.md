@@ -1,5 +1,14 @@
 ## Changelog
 
+### 1.0.0
+- Stable release.
+- Mating followers can no longer be interrupted by the player.
+- Code cleanup.
+
+### 0.6.0
+- Followers can now mate with the Lamb (the player).
+- Children of followers who mated with the Lamb will inherit the follower's skin, traits, and 50% of its level.
+
 ### 0.5.1
 - Children now always perform "leisure" tasks until they grow up.
 - Fixed some minor visual issues with children.
@@ -15,7 +24,6 @@
 - Fixed the command sometimes failing unexpectedly (hopefully).
 - Fixed keyboard controls
 - Fixed various issues with children.
-
 
 ### 0.3.0 (TS: 0.2.2)
 - Update to work with API 0.1.14.
